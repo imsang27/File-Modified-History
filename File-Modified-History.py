@@ -9,7 +9,7 @@ weekday_korean = ['월', '화', '수', '목', '금', '토', '일']
 def convert_to_kst(timestamp):
     dt = datetime.fromtimestamp(timestamp).astimezone()
     kst_time = dt.strftime('%Y-%m-%d')  # 날짜 포맷
-    korean_weekday = weekday_korean[dt.isoweekday()]  # weekday() -> isoweekday(): ISO 8601 포멧을 사용해 0부터 요일을 한글로 변환
+    korean_weekday = weekday_korean[dt.weekday()]  # weekday() -> isoweekday(): ISO 8601 포멧을 사용해 0부터 요일을 한글로 변환
     time_part = dt.strftime('%H:%M:%S')  # 시간 포맷
     return f"{kst_time} {korean_weekday} {time_part}"
 
@@ -83,8 +83,8 @@ def save_to_json(data, output_file):
         print(f"파일 저장 중 오류가 발생했습니다: {e}")
 
 # 사용 예시
-directory_path = r"your/directory/path"  # 경로를 지정하세요
-output_file = "output-file-name.json"
+directory_path = r"C:\Users\imsan\Documents\Obsidian"  # 경로를 지정하세요
+output_file = "File-Modified-History.json"
 
 # 제외할 파일, 폴더 및 확장자 설정
 exclude_files = ['ignore_file_name.txt']  # 제외할 파일들
