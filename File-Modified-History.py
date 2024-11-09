@@ -83,7 +83,7 @@ def save_to_json(data, output_file):
         print(f"파일 저장 중 오류가 발생했습니다: {e}")
 
 # 사용 예시
-directory_path = r"Your/Directory/path"  # 경로를 지정하세요
+directory_path = r"Your/Directory/Path"  # 경로를 지정하세요
 output_file = "File-Modified-History.json"
 
 # 제외할 파일, 폴더 및 확장자 설정
