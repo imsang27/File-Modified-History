@@ -6,12 +6,11 @@
 __pycache__/
 *.py[cod]
 *$py.class
-
-# Test File Exception
-F-M-H.py
+*.py
+!File-Modified-History.py
 
 # JSON exception
-File-Modified-History_*.json
+*.json
 
 # C extensions
 *.so
