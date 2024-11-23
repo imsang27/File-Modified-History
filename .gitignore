@@ -9,7 +9,7 @@ __pycache__/
 *.py
 !File-Modified-History.py
 
-# JSON exception
+# JSON Exception
 *.json
 
 # C extensions
