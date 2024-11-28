@@ -1,12 +1,61 @@
-1. 변수로 지정한 특정 경로를 기준으로 한다.
+1. 특정 경로를 변수로 지정하고 기준으로 한다. (예외 처리 필요)
 2. 제외할 파일 이름(exclude_files), 폴더 이름(exclude_folders), 확장자(exclude_extensions)를 지정하고 exclude라는 하나의 변수로 묶는다.
-3. 지정한 경로를 기준으로 exclude를 제외하고 하위 디렉토리에서 파일의 생성 시각(Date_of_creation), 수정 시각(Modified_times)을 저장한다
-4. 수정 시각 중 가장 마지막 수정 시각은 마지막 수정 시각(Last_modified)으로 저장한다.
+3. 지정한 경로를 기준으로 exclude를 제외하고 하위 디렉토리에서 파일의 생성 시각(Date_of_creation), 수정 시각(Modified_times)을 저장한다.
+4. 수정 시각은 최신순으로 정렬한다.
+5. 수정 시각 중 가장 마지막 수정 시각은 Last_modified로 저장한다.
 
-?.  중첩된 구조로 JSON 파일로 저장한다.
+6. 만약 기존 데이터가 없다면:
+  6-1. 저장할 파일은 File-Modified-History_(timestamp).json 형식을 따르고, timestamp는 YYYYMMDD_HHmmss형식이다.
+  6-2. 중첩된 구조로 JSON 파일을 저장한다.
 
-1. 기존 데이터를 가져오고
-2. 새로운 데이터도 가져온 후
-3. 기존 데이터와 새로운 데이터를 중첩없이 병합 후
-4. 이름을 변경하기 전인 파일에 저장 후
-5. 저장한 파일 이름의 타임 스템프를 최신으로 수정하여 저장한다
+7. 만약 기존 데이터가 있다면:
+  7-1. 기존 데이터와 새로운 데이터를 가져온 후
+  7-2. 변경된 부분(파일에)만 Modified_times와 Last_modified의 변경 사항을 중복 없이 병합
+    7-2-1 병합 시 Modified_times: 기존 값과 새로운 값을 병합하되, 중복을 제거하고 최신순으로 정렬.
+    7-2-2 Last_modified: 병합된 Modified_times 중 가장 최근의 값으로 설정.
+  7-3. 병합할 때 Modified_times는 최신순으로 정렬
+  7-4. 이름을 변경하기 전인 파일에 저장 후
+  7-5. 저장한 파일 이름의 타임 스템프를 최신으로 수정하여 저장한다
+
+8. 각 부분에 대한 예외 처리를 함
+
+JSON 파일 구조 예시
+
+folder1 {
+  file1 {
+    "Date_of_creation": "YYYY-MM-DD 월 HH:mm:ss",
+    "Modified_times": [
+      "YYYY-MM-DD 화 HH:mm:30",
+      "YYYY-MM-DD 화 HH:mm:10"
+      ]
+    "Last_modified": "YYYY-MM-DD 화 HH:mm:30"
+  }
+  file2 {
+    "Date_of_creation": "YYYY-MM-DD 수 HH:mm:ss",
+    "Modified_times": [
+      "YYYY-MM-DD 금 HH:mm:ss",
+      "YYYY-MM-DD 목 HH:mm:ss"
+      ]
+    "Last_modified": "YYYY-MM-DD 금 HH:mm:ss"
+  }
+}
+folder2 {
+  file1 {
+    "Date_of_creation": "YYYY-MM-DD 금 HH:mm:ss",
+    "Modified_times": [
+      "YYYY-MM-DD 금 16:mm:ss"
+      "YYYY-MM-DD 금 03:mm:ss"
+      "YYYY-MM-DD 금 01:mm:ss"
+      ]
+    "Last_modified": "YYYY-MM-DD 금 16:mm:ss"
+  }
+  file2 {
+    "Date_of_creation": "YYYY-MM-DD 목 HH:mm:ss",
+    "Modified_times": [
+      "YYYY-02-04 월 HH:mm:ss"
+      "YYYY-02-03 일 HH:mm:ss"
+      "YYYY-01-DD 토 HH:mm:ss"
+      ]
+    "Last_modified": "YYYY-02-04 월 HH:mm:ss"
+  }
+}
